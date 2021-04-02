@@ -4,6 +4,7 @@ LABEL maintainer="Preston Davis pdavis@pebcac.org"
 RUN sudo dnf update -y && dnf install -y \
     curl \
     git \
+    golang \
     htop \
     jq \
     net-tools \
@@ -26,6 +27,10 @@ WORKDIR $HOME
 RUN mkdir -p $HOME/bin/ && \
     curl https://cht.sh/:cht.sh > $HOME/bin/cht.sh && \
     chmod +x $HOME/bin/cht.sh
+# Make go working directory
+RUN mkdir -p $HOME/workspace/go
+# Export GOPATH
+ENV export GOPATH=/home/pdavis/workspace/go
 # Include $HOME/bin in path
 ENV PATH=$PATH:$HOME/bin
 # Install SpaceVIM
