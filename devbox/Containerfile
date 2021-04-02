@@ -1,0 +1,26 @@
+FROM fedora:latest
+LABEL maintainer="Preston Davis pdavis@pebcac.org"
+# Package install
+RUN dnf update -y && dnf install -y git vim zsh jq net-tools procps-ng htop curl bashtop && dnf clean all
+# Add default user ang group
+USER pdavis
+# Enable terminal colors
+ENV TERM xterm
+# user home dir
+ENV HOME=/home/pdavis
+# set working directory
+WORKDIR $HOME
+# Install cheat.sh
+RUN mkdir -p $HOME/bin/ && curl https://cht.sh/:cht.sh > $HOME/bin/cht.sh && chmod +x $HOME/bin/cht.sh
+# Install SpaceVIM
+RUN curl -sLf https://spacevim.org/install.sh | bash
+# Make go working dir
+RUN mkdir -p /home/pdavis/workspace/go
+# Export GOPATH
+ENV export GOPATH=/home/pdavis/workspace/go
+# Install oh-my-zsh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+# set the zsh theme
+ENV ZSH_THEME=robbyrussell
+# set default terminal to zsh
+CMD ["zsh"]
